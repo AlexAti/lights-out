@@ -20,8 +20,8 @@
   (swap! app-state update-in [:active y x] not))
 
 (defn button-component [x y]
-  [:div {:class (str "button " (when (active x y) "lit"))}
-    [:a {:on-click #(toggle x y)} "x"]])
+  [:a {:class (str "button " (when (active x y) "lit"))
+       :on-click #(toggle x y)}])
 
 (defn matrix-component []
   [:div#matrix

@@ -6,14 +6,16 @@
 }
 
 .col {
-  margin: 5px;
+  margin-left: -3px;
+  margin-right: -3px;
   background-color: #ff0000;
 }
 
 .button {
+  display:block;
   width: 100px;
   height: 100px;
-  margin: 5px;
+  margin: 6px;
   background-color: #000000;
 }
 
