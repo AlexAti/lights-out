@@ -57,7 +57,8 @@
 
 (defn button-component [x y]
   [:a {:class (str "button " (when (active x y) "lit"))
-       :on-click #((random-behaviour) x y)}])
+       :on-click #((random-behaviour) x y)}
+       (if (active x y) "ON" "OFF")])
 
 (defn matrix-component []
   [:div#matrix

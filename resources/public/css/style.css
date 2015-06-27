@@ -8,15 +8,20 @@
 .col {
   margin-left: -3px;
   margin-right: -3px;
-  background-color: #ff0000;
+  background-color: #666666;
 }
 
 .button {
-  display:block;
+  display:flex;
+  align-items:center;
+  justify-content: center;
   width: 100px;
   height: 100px;
   margin: 6px;
-  background-color: #000000;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 150%;
+  background-color: #aaaaaa;
 }
 
 .lit {
