@@ -51,11 +51,26 @@
                     alltherest-behaviour
                     alltherest-behaviour])
 
+(defn behaviour [x y]
+  (get-in @app-state [:behaviour y x]))
+
 (defn behave [x y]
-  ((get-in @app-state [:behaviour y x]) x y))
+  ((behaviour x y) x y))
+
+(let [numb (count behaviour-set)
+      step (/ 360 numb)
+      pos0 (int (rand 360))]
+  (def behaviour-hue (zipmap behaviour-set
+                             (map #(+ pos0 (* % step)) (range numb)))))
+
+(defn hue [x y]
+  (let [behaviour (behaviour x y)]
+    (get behaviour-hue behaviour)))
 
 (defn button-component [x y]
-  [:a {:class (str "button " (when (active x y) "lit"))
+  [:a.button {:style {:background-color (if (active x y)
+                                            (str "hsl(" (hue x y) ",80%,50%)")
+                                            (str "hsl(" (hue x y) ",80%,30%)"))}
        :on-click #(behave x y)}
        (if (active x y) "ON" "OFF")])
 
