@@ -1,4 +1,4 @@
-Lights Out!
+# Lights Out!
 -----------
 
 A test project that I made to test reagent and figwheel.
@@ -6,3 +6,34 @@ A test project that I made to test reagent and figwheel.
 I've just made lein new figwheel lights-out -- --reagent
 
 And voilà! A fresh new repo.
+
+
+## Overview
+
+A clone of an old physical electronic game.
+
+## Setup
+
+To get an interactive development environment run:
+
+    lein figwheel
+
+and open your browser at [localhost:3449](http://localhost:3449/).
+This will auto compile and send all changes to the browser without the
+need to reload. After the compilation process is complete, you will
+get a Browser Connected REPL. An easy way to try it is:
+
+    (js/alert "Am I connected?")
+
+and you should see an alert in the browser window.
+
+To clean all compiled files:
+
+    lein clean
+
+To create a production build run:
+
+    lein cljsbuild once min
+
+And open your browser in `resources/public/index.html`. You will not
+get live reloading, nor a REPL.
