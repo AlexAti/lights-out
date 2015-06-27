@@ -8,10 +8,7 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:x 6 :y 4 :active [[true true true true true true]
-                                             [true true true true true true]
-                                             [true true false true true true]
-                                             [true true true true true true]]}))
+(defonce app-state (atom {:x 6 :y 4 :behaviour [] :active []}))
 
 (defn active [x y]
   (get-in @app-state [:active y x]))
@@ -47,17 +44,19 @@
       (dotimes [j y]
         (toggle i j)))))
 
-(defn random-behaviour []
-  (rand-nth [singleton-behaviour
-             arandomone-behaviour
-             justmyrow-behaviour
-             justmycol-behaviour
-             alltherest-behaviour
-             alltherest-behaviour]))
+(def behaviour-set [singleton-behaviour
+                    arandomone-behaviour
+                    justmyrow-behaviour
+                    justmycol-behaviour
+                    alltherest-behaviour
+                    alltherest-behaviour])
+
+(defn behave [x y]
+  ((get-in @app-state [:behaviour y x]) x y))
 
 (defn button-component [x y]
   [:a {:class (str "button " (when (active x y) "lit"))
-       :on-click #((random-behaviour) x y)}
+       :on-click #(behave x y)}
        (if (active x y) "ON" "OFF")])
 
 (defn matrix-component []
@@ -67,7 +66,29 @@
         (for [row (range (:y @app-state))]
           [button-component col row])])])
 
-(reagent/render-component [matrix-component]
+(defn random-matrix [x y choices]
+  (vec (for [j (range y)]
+    (vec (for [i (range x)]
+      (rand-nth choices))))))
+
+(defn restart-game []
+  (let [{x :x y :y} @app-state]
+    (swap! app-state assoc :active (random-matrix x y [true false]))
+    (swap! app-state assoc :behaviour (random-matrix x y behaviour-set))))
+
+(defn restart-button []
+  [:a.restart
+    {:on-click #(restart-game)}
+    "Click here for a new game!"])
+
+(defn app-component []
+  [:div.app
+    [:div.header
+      [:h1 "Click on buttons and turn them all off!"]
+      [restart-button]]
+    [matrix-component]])
+
+(reagent/render-component [app-component]
                           (. js/document (getElementById "app")))
 
 (defn on-js-reload []
