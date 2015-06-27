@@ -26,11 +26,11 @@
     (toggle i j)))
 
 (defn justmyrow-behaviour [x y]
-  (dotimes [i (get @app-state x)]
+  (dotimes [i (get @app-state :x)]
     (toggle i y)))
 
 (defn justmycol-behaviour [x y]
-  (dotimes [j (get @app-state y)]
+  (dotimes [j (get @app-state :y)]
     (toggle x j)))
 
 (defn wholecross-behaviour [x y]
