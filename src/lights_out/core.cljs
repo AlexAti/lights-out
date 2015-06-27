@@ -8,11 +8,20 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:x 6 :y 4}))
+(defonce app-state (atom {:x 6 :y 4 :active [[true true true true true true]
+                                             [true true true true true true]
+                                             [true true false true true true]
+                                             [true true true true true true]]}))
+
+(defn active [x y]
+  (get-in @app-state [:active y x]))
+
+(defn toggle [x y]
+  (swap! app-state update-in [:active y x] not))
 
 (defn button-component [x y]
-  [:div.button.lit
-    [:a {:href "#"} "x"]])
+  [:div {:class (str "button " (when (active x y) "lit"))}
+    [:a {:on-click #(toggle x y)} "x"]])
 
 (defn matrix-component []
   [:div#matrix
