@@ -19,9 +19,45 @@
 (defn toggle [x y]
   (swap! app-state update-in [:active y x] not))
 
+(defn singleton-behaviour [x y]
+  (toggle x y))
+
+(defn arandomone-behaviour [x y]
+  (let [{x :x y :y} @app-state
+        i (int (rand x))
+        j (int (rand y))]
+    (toggle i j)))
+
+(defn justmyrow-behaviour [x y]
+  (dotimes [i (get @app-state x)]
+    (toggle i y)))
+
+(defn justmycol-behaviour [x y]
+  (dotimes [j (get @app-state y)]
+    (toggle x j)))
+
+(defn wholecross-behaviour [x y]
+  (justmycol-behaviour x y)
+  (justmyrow-behaviour x y))
+
+(defn alltherest-behaviour [x y]
+  (toggle x y)
+  (let [{x :x y :y} @app-state]
+    (dotimes [i x]
+      (dotimes [j y]
+        (toggle i j)))))
+
+(defn random-behaviour []
+  (rand-nth [singleton-behaviour
+             arandomone-behaviour
+             justmyrow-behaviour
+             justmycol-behaviour
+             alltherest-behaviour
+             alltherest-behaviour]))
+
 (defn button-component [x y]
   [:a {:class (str "button " (when (active x y) "lit"))
-       :on-click #(toggle x y)}])
+       :on-click #((random-behaviour) x y)}])
 
 (defn matrix-component []
   [:div#matrix
