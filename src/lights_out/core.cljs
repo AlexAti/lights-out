@@ -21,8 +21,11 @@
                 grid)))
 
 (defn update-score! []
-  (let [grid (get @app-state :active)]
-    (swap! app-state assoc :activeno (count-lit-tiles grid))))
+  (let [grid (get @app-state :active)
+        litno (count-lit-tiles grid)]
+    (if (= 0 litno)
+      (jump-level)
+      (swap! app-state assoc :activeno litno))))
 
 (defn singleton-behaviour [x y]
   (toggle x y)
@@ -65,7 +68,7 @@
 
 (defn behave [x y]
   ((behaviour x y) x y)
-  )
+  (update-score!))
 
 (let [numb (count behaviour-set)
       step (/ 360 numb)
@@ -104,6 +107,10 @@
     (swap! app-state assoc :behaviour (random-matrix x y (subvec behaviour-set 0 l)))
     (swap! app-state assoc :active (random-matrix x y [true false]))
     (update-score!)))
+
+(defn jump-level []
+  (swap! app-state update :level inc)
+  (restart-game))
 
 (defn restart-button []
   [:a.restart
