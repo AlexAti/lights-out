@@ -8,7 +8,7 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:x 6 :y 4 :behaviour [] :active []}))
+(defonce app-state (atom {:x 6 :y 4 :level 1 :activeno 0 :active [] :behaviour []}))
 
 (defn active [x y]
   (get-in @app-state [:active y x]))
@@ -16,8 +16,17 @@
 (defn toggle [x y]
   (swap! app-state update-in [:active y x] not))
 
+(defn count-lit-tiles [grid]
+  (apply + (map #(count (filter identity %))
+                grid)))
+
+(defn update-score! []
+  (let [grid (get @app-state :active)]
+    (swap! app-state assoc :activeno (count-lit-tiles grid))))
+
 (defn singleton-behaviour [x y]
-  (toggle x y))
+  (toggle x y)
+  (update-score!))
 
 (defn arandomone-behaviour [x y]
   (let [{x :x y :y} @app-state
@@ -55,7 +64,8 @@
   (get-in @app-state [:behaviour y x]))
 
 (defn behave [x y]
-  ((behaviour x y) x y))
+  ((behaviour x y) x y)
+  )
 
 (let [numb (count behaviour-set)
       step (/ 360 numb)
@@ -90,20 +100,23 @@
       (rand-nth choices))))))
 
 (defn restart-game []
-  (let [{x :x y :y} @app-state]
+  (let [{x :x y :y l :level} @app-state]
+    (swap! app-state assoc :behaviour (random-matrix x y (subvec behaviour-set 0 l)))
     (swap! app-state assoc :active (random-matrix x y [true false]))
-    (swap! app-state assoc :behaviour (random-matrix x y behaviour-set))))
+    (update-score!)))
 
 (defn restart-button []
   [:a.restart
     {:on-click #(restart-game)}
-    "Click here for a new game!"])
+    "Click here for a fresh (re)start!"])
 
 (defn app-component []
   [:div.app
     [:div.header
       [:h1 "Click on buttons and turn them all off!"]
-      [restart-button]]
+      [:h3 "You are now in level " (:level @app-state)". " (:activeno @app-state) " more tiles to go!"]
+      [restart-button]
+      [:p "(don't worry, you won't lose your level)"]]
     [matrix-component]])
 
 (reagent/render-component [app-component]
