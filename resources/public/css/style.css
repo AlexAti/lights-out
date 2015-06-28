@@ -19,7 +19,7 @@ body {
 
 #matrix {
   display: flex;
-  background-color:#dddddd;
+  justify-content: center;
 }
 
 .col {
@@ -31,9 +31,30 @@ body {
   display:flex;
   align-items:center;
   justify-content: center;
+  color:rgba(255,255,255,0);
   width: 100px;
   height: 100px;
   margin: 6px;
   font-weight: bold;
   font-size: 150%;
+}
+
+.legend {
+  margin: 15px;
+
+}
+
+.legendline {
+  display:flex;
+}
+
+.legendbox {
+  width: 20px;
+  height: 20px;
+  margin: 3px;
+}
+
+.legendtext {
+  padding: 4px;
+  font-size: smaller;
 }

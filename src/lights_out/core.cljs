@@ -29,6 +29,7 @@
       (swap! app-state assoc :activeno litno))))
 
 (defn singleton-behaviour [x y]
+  "These tiles can be switched off by pushing on them."
   (toggle x y)
   (update-score!))
 
@@ -36,7 +37,7 @@
   (doall (for [m [-1 0 1] :when (< -1 (+ m i) x)
                n [-1 0 1] :when (< -1 (+ n j) y)
                           :when (< 0 (+ (Math/abs m) (Math/abs n)))]
-              [(+ m i) (+ n lj)])))
+              [(+ m i) (+ n j)])))
 
 (defn cross-neighbors [i j x y]
   (doall (for [m [-1 0 1] :when (< -1 (+ m i) x)
@@ -45,30 +46,37 @@
               [(+ m i) (+ n j)])))
 
 (defn classic-behaviour [i j]
+  "These tiles are much more fun."
   (let [{x :x y :y} @app-state
         neighbors (cross-neighbors i j x y)]
        (doseq [n neighbors]
          (apply toggle n))))
 
 (defn arandomone-behaviour [x y]
+  "Watch out! some one is doing strange things..."
   (let [{x :x y :y} @app-state
         i (int (rand x))
         j (int (rand y))]
     (toggle i j)))
 
 (defn justmyrow-behaviour [x y]
+  "These tiles make a lot of work, just like rowing."
   (dotimes [i (get @app-state :x)]
     (toggle i y)))
 
 (defn justmycol-behaviour [x y]
+  "These tiles are of towering importance."
   (dotimes [j (get @app-state :y)]
     (toggle x j)))
 
 (defn wholecross-behaviour [x y]
+  "These tiles can do a lot of good."
+  (toggle x y)
   (justmycol-behaviour x y)
   (justmyrow-behaviour x y))
 
 (defn alltherest-behaviour [x y]
+  "These tiles put everyone on the verge."
   (toggle x y)
   (let [{x :x y :y} @app-state]
     (dotimes [i x]
@@ -77,7 +85,7 @@
 
 (def behaviour-set [singleton-behaviour
                     classic-behaviour
-                    arandomone-behaviour
+                    ;arandomone-behaviour
                     justmyrow-behaviour
                     justmycol-behaviour
                     wholecross-behaviour
@@ -122,10 +130,18 @@
     (vec (for [i (range x)]
       (rand-nth choices))))))
 
+(defn backtrack-initgrid [x y]
+  (swap! app-state assoc :active (random-matrix x y [false]))
+  (dotimes [i 1000]
+    (let [i (rand x)
+          j (rand y)]
+        ((behaviour i j) i j))))
+
 (defn restart-game []
   (let [{x :x y :y l :level} @app-state]
     (swap! app-state assoc :behaviour (random-matrix x y (subvec behaviour-set 0 l)))
-    (swap! app-state assoc :active (random-matrix x y [true false]))
+    ;(swap! app-state assoc :active (random-matrix x y [true false]))
+    (backtrack-initgrid x y)
     (update-score!)))
 
 (defn jump-level []
@@ -137,14 +153,35 @@
     {:on-click #(restart-game)}
     "Click here for a fresh (re)start!"])
 
+(def instruction-list ["These tiles can be switched off by pushing on them."
+                       "These tiles are much more fun."
+                       ;"Watch out! some one is doing strange things..."
+                       "These tiles make a lot of work, just like rowing."
+                       "These tiles are of towering importance."
+                       "These tiles can do a lot of good."
+                       "These tiles put everyone on the verge."])
+
+(defn legend-component []
+  (let [level (get @app-state :level)
+        behaviours (subvec behaviour-set 0 level)
+        ;instruction-list (map doc behaviours)
+        ]
+    [:div.legend
+      (for [i (range level)]
+        [:div.legendline
+          [:div.legendbox {:style {:background-color (str "hsl(" (behaviour-hue (nth behaviours i)) ",80%,50%)")}}]
+          [:div.legendtext (nth instruction-list i)]])]))
+
 (defn app-component []
   [:div.app
     [:div.header
-      [:h1 "Click on buttons and turn them all off!"]
+      [:h1 "Lights Out!"]
+      [:h2 "Click on buttons and turn them all off"]
       [:h3 "You are now in level " (:level @app-state)". " (:activeno @app-state) " more tiles to go!"]
       [restart-button]
       [:p "(don't worry, you won't lose your level)"]]
-    [matrix-component]])
+    [matrix-component]
+    [legend-component]])
 
 (reagent/render-component [app-component]
                           (. js/document (getElementById "app")))
