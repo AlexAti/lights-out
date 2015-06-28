@@ -68,9 +68,12 @@
     (get behaviour-hue behaviour)))
 
 (defn button-component [x y]
-  [:a.button {:style {:background-color (if (active x y)
+  [:a.button {:style {:color (if (active x y)
+                                 (str "hsl(" (hue x y) ",80%,10%)")
+                                 (str "hsl(" (hue x y) ",80%,50%)"))
+                      :background-color (if (active x y)
                                             (str "hsl(" (hue x y) ",80%,50%)")
-                                            (str "hsl(" (hue x y) ",80%,30%)"))}
+                                            (str "hsl(" (hue x y) ",80%,10%)"))}
        :on-click #(behave x y)}
        (if (active x y) "ON" "OFF")])
 
