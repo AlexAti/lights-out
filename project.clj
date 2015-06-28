@@ -7,12 +7,18 @@
   :dependencies [[org.clojure/clojure "1.7.0-RC1"]
                  [org.clojure/clojurescript "0.0-3297"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+                 [http-kit "2.1.18"]
+                 [ring/ring-defaults "0.1.5"]
+                 [compojure "1.3.4"]
+                 [hiccup "1.0.5"]
                  [reagent "0.5.0"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.3.4"]]
 
   :source-paths ["src"]
+
+  :main lights-out.server
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
