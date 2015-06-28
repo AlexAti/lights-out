@@ -20,6 +20,7 @@
   (apply + (map #(count (filter identity %))
                 grid)))
 
+(declare jump-level)
 (defn update-score! []
   (let [grid (get @app-state :active)
         litno (count-lit-tiles grid)]
@@ -30,6 +31,24 @@
 (defn singleton-behaviour [x y]
   (toggle x y)
   (update-score!))
+
+(defn all-neighbors [i j x y]
+  (doall (for [m [-1 0 1] :when (< -1 (+ m i) x)
+               n [-1 0 1] :when (< -1 (+ n j) y)
+                          :when (< 0 (+ (Math/abs m) (Math/abs n)))]
+              [(+ m i) (+ n lj)])))
+
+(defn cross-neighbors [i j x y]
+  (doall (for [m [-1 0 1] :when (< -1 (+ m i) x)
+               n [-1 0 1] :when (< -1 (+ n j) y)
+                          :when (< 0 (+ (Math/abs m) (Math/abs n)) 2)]
+              [(+ m i) (+ n j)])))
+
+(defn classic-behaviour [i j]
+  (let [{x :x y :y} @app-state
+        neighbors (cross-neighbors i j x y)]
+       (doseq [n neighbors]
+         (apply toggle n))))
 
 (defn arandomone-behaviour [x y]
   (let [{x :x y :y} @app-state
@@ -57,10 +76,11 @@
         (toggle i j)))))
 
 (def behaviour-set [singleton-behaviour
+                    classic-behaviour
                     arandomone-behaviour
                     justmyrow-behaviour
                     justmycol-behaviour
-                    alltherest-behaviour
+                    wholecross-behaviour
                     alltherest-behaviour])
 
 (defn behaviour [x y]
