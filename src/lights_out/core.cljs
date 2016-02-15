@@ -115,7 +115,7 @@
                       :background-color (if (active x y)
                                             (str "hsl(" (hue x y) ",80%,50%)")
                                             (str "hsl(" (hue x y) ",80%,10%)"))}
-       :on-click #(behave x y)}
+              :on-click #(behave x y)}
        (if (active x y) "ON" "OFF")])
 
 (defn matrix-component []
@@ -127,8 +127,8 @@
 
 (defn random-matrix [x y choices]
   (vec (for [j (range y)]
-    (vec (for [i (range x)]
-      (rand-nth choices))))))
+        (vec (for [i (range x)]
+              (rand-nth choices))))))
 
 (defn backtrack-initgrid [x y]
   (swap! app-state assoc :active (random-matrix x y [false]))
@@ -163,9 +163,9 @@
 
 (defn legend-component []
   (let [level (get @app-state :level)
-        behaviours (subvec behaviour-set 0 level)
+        behaviours (subvec behaviour-set 0 level)]
         ;instruction-list (map doc behaviours)
-        ]
+
     [:div.legend
       (for [i (range level)]
         [:div.legendline
@@ -186,8 +186,7 @@
 (reagent/render-component [app-component]
                           (. js/document (getElementById "app")))
 
-(defn on-js-reload []
+(defn on-js-reload [])
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)

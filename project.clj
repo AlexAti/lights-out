@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :min-lein-version "2.0.0"
-  
+
   :dependencies [[org.clojure/clojure "1.7.0-RC1"]
                  [org.clojure/clojurescript "0.0-3297"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
@@ -27,29 +27,29 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {
-    :builds [{:id "dev"
-              :source-paths ["src"]
+              :builds [{:id "dev"
+                        :source-paths ["src"]
 
-              :figwheel { :on-jsload "lights-out.core/on-js-reload" }
+                        :figwheel { :on-jsload "lights-out.core/on-js-reload"}
 
-              :compiler {:main lights-out.core
-                         :asset-path "js/compiled/out"
-                         :output-to "resources/public/js/compiled/lights_out.js"
-                         :output-dir "resources/public/js/compiled/out"
-                         :source-map-timestamp true }}
-             {:id "min"
-              :source-paths ["src"]
-              :compiler {:output-to "resources/public/js/compiled/lights_out.js"
-                         :main lights-out.core
-                         :optimizations :advanced
-                         :pretty-print false}}]}
+                        :compiler {:main lights-out.core
+                                   :asset-path "js/compiled/out"
+                                   :output-to "resources/public/js/compiled/lights_out.js"
+                                   :output-dir "resources/public/js/compiled/out"
+                                   :source-map-timestamp true}}
+                       {:id "min"
+                        :source-paths ["src"]
+                        :compiler {:output-to "resources/public/js/compiled/lights_out.js"
+                                   :main lights-out.core
+                                   :optimizations :advanced
+                                   :pretty-print false}}]}
 
   :figwheel {
              ;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
              ;; :server-ip "127.0.0.1"
 
-             :css-dirs ["resources/public/css"] ;; watch and update CSS
+             :css-dirs ["resources/public/css"]}) ;; watch and update CSS
 
              ;; Start an nREPL server into the running figwheel process
              ;; :nrepl-port 7888
@@ -74,4 +74,3 @@
 
              ;; to configure a different figwheel logfile path
              ;; :server-logfile "tmp/logs/figwheel-logfile.log"
-             })
