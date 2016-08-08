@@ -1,0 +1,61 @@
+/* some style */
+
+body {
+  font-family: sans-serif;
+}
+
+.h1 {
+  text-align: center;
+}
+
+.restart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 40px;
+  background-color: #ddddff;
+}
+
+#matrix {
+  display: flex;
+  justify-content: center;
+}
+
+.col {
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.button {
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  color:rgba(255,255,255,0);
+  width: 100px;
+  height: 100px;
+  margin: 6px;
+  font-weight: bold;
+  font-size: 150%;
+  touch-action: manipulation;
+}
+
+.legend {
+  margin: 15px;
+
+}
+
+.legendline {
+  display:flex;
+}
+
+.legendbox {
+  width: 20px;
+  height: 20px;
+  margin: 3px;
+}
+
+.legendtext {
+  padding: 4px;
+  font-size: smaller;
+}
