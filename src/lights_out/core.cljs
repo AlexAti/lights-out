@@ -8,7 +8,7 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:x 6 :y 4 :level 1 :activeno 0 :active [] :behaviour []}))
+(defonce app-state (atom {:x 10 :y 10 :level 1 :activeno 0 :active [] :behaviour []}))
 
 (defn active [x y]
   (get-in @app-state [:active y x]))

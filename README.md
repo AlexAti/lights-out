@@ -44,6 +44,13 @@ So please feel free to comment on the result!
 
  - The default index.html text
  - The ability to publish in heroku
+ - When restarting the counter goes crazy
+ - Dont propose a new game when remaining tiles are less than half the board
+ - Create a bigger board
+ - When the board is very big, tiles go smaller
+ - Better layout for the title
+ - Animation when jumping level
+ - check on github link
  - New tiles that add / remove rows and columns
  - Fixed / blank tiles? Mazes?
  - Fix randomtiles
@@ -56,5 +63,5 @@ So please feel free to comment on the result!
  - 3D?
  - Ability to work offline?
  - Ability to store highscore intersessions? Interuser?
- - Is it easy to make this an app?
+ - Is it easy to make this an app? See React Native and reagent this  fall for this
  - Can we generalize it majorly? Core.logic game master?
